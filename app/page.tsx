@@ -14,7 +14,10 @@ export default function DockerInstallerPage() {
   const [theme, setTheme] = useState<"dark" | "light">("light");
 
   useEffect(() => {
-    const saved = localStorage.getItem("docker-helper-theme") as "dark" | "light" | null;
+    const saved = localStorage.getItem("docker-helper-theme") as
+      | "dark"
+      | "light"
+      | null;
     const initial = saved || "light";
     setTheme(initial);
     document.documentElement.classList.toggle("light", initial === "light");
@@ -30,14 +33,15 @@ export default function DockerInstallerPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header theme={theme} onToggleTheme={toggleTheme} />
-      
+
       <main className="flex-1">
         <div className="max-w-5xl mx-auto px-6 py-8">
           {/* Intro */}
           <section className="mb-10">
-            <p className="text-muted-foreground leading-relaxed max-w-3xl text-[15px]">
-              在无网络或内网服务器上安装 Docker，需要提前准备好安装脚本、Docker 二进制包和 Docker Compose 二进制文件。
-              <span className="text-foreground font-medium">选择版本和架构</span>后，本站自动生成安装脚本并提供所有资源的下载链接，每个文件提供官方和国内镜像源。
+            <p className="text-muted-foreground leading-relaxed text-[15px]">
+              本网站用于辅助在离线环境中部署 Docker。根据目标服务器选择 Docker
+              版本和 CPU 架构后，下载生成的安装脚本、Docker 二进制包和 Docker
+              Compose 二进制文件，并将所有文件上传至服务器同一目录，执行安装脚本即可完成安装。
             </p>
           </section>
 
