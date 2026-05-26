@@ -11,20 +11,7 @@ export const metadata: Metadata = {
   description: '在无网络或内网服务器上安装 Docker，提供安装脚本和下载链接',
   generator: 'v0.app',
   icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
+    icon: '/docker-logo.png',
     apple: '/apple-icon.png',
   },
 }
