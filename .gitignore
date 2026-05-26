@@ -1,0 +1,13 @@
+node_modules
+.next/
+.DS_Store
+.vercel/
+tsconfig.tsbuildinfo
+
+.env*.local
+
+__v0_runtime_loader.js
+__v0_devtools.tsx
+__v0_jsx-dev-runtime.tsx
+.snowflake/
+.v0-trash/
