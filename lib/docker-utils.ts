@@ -66,7 +66,7 @@ set -euo pipefail
 DOCKER_PACKAGE="${dockerFileName}"
 COMPOSE_FILE="${composeFileName}"
 DEPLOY_PATH="/usr/bin"
-DOCKER_DATA_PATH="/egova/data/docker"
+DOCKER_DATA_PATH="/var/lib/docker"
 
 DOCKER_BINARIES=(
     containerd containerd-shim containerd-shim-runc-v2
@@ -92,6 +92,12 @@ echo_error() {
 
 install_docker() {
     echo_info "开始 Docker 离线安装..."
+
+    read -p "请输入 Docker 数据存储路径 [默认: /var/lib/docker]: " input_data_path
+    if [ -n "$input_data_path" ]; then
+        DOCKER_DATA_PATH="$input_data_path"
+    fi
+    echo_info "Docker 数据路径: $DOCKER_DATA_PATH"
 
     if [ ! -f "$DOCKER_PACKAGE" ]; then
         echo_error "未找到 Docker 包: $DOCKER_PACKAGE"
@@ -152,17 +158,28 @@ install_docker() {
     mkdir -p "$DOCKER_DATA_PATH"
     chmod 755 "$DOCKER_DATA_PATH"
 
-    cat > /etc/docker/daemon.json <<DEOF
+    if [ "$DOCKER_DATA_PATH" = "/var/lib/docker" ]; then
+        cat > /etc/docker/daemon.json <<DEOF
+{
+    "log-driver": "json-file",
+    "log-opts": {
+        "max-size": "100m",
+        "max-file": "3"
+    }
+}
+DEOF
+    else
+        cat > /etc/docker/daemon.json <<DEOF
 {
     "data-root": "$DOCKER_DATA_PATH",
     "log-driver": "json-file",
     "log-opts": {
         "max-size": "100m",
         "max-file": "3"
-    },
-    "storage-driver": "overlay2"
+    }
 }
 DEOF
+    fi
     echo_info "Docker 配置文件已生成"
 
     cat > /etc/systemd/system/docker.service <<'EOF'
